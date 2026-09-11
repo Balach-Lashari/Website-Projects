@@ -50,15 +50,26 @@
       <div class="card-stage">
         <button id="prev-btn" class="nav-arrow" aria-label="Previous card">‹</button>
 
-        <div id="flashcard" class="flashcard">
+        <div id="flashcard" class="flashcard" tabindex="0" role="button" aria-pressed="false" aria-label="Flashcard. Press Enter or click to reveal the meaning.">
           <span id="card-status-badge" class="status-badge"></span>
-          <p id="card-urdu" class="card-urdu" lang="ur" dir="rtl"></p>
-          <p id="card-translit" class="card-translit"></p>
-          <p id="card-english" class="card-english"></p>
+
+          <div class="flashcard-inner">
+            <div class="flashcard-face flashcard-front">
+              <p id="card-urdu" class="card-urdu" lang="ur" dir="rtl"></p>
+              <p class="flip-hint">👆 Tap to reveal meaning</p>
+            </div>
+            <div class="flashcard-face flashcard-back">
+              <p id="card-translit" class="card-translit"></p>
+              <p id="card-english" class="card-english"></p>
+              <p class="flip-hint">👆 Tap to see Urdu again</p>
+            </div>
+          </div>
         </div>
 
         <button id="next-btn" class="nav-arrow" aria-label="Next card">›</button>
       </div>
+
+      <button id="flip-btn" class="btn btn-flip">🔄 Flip Card</button>
 
       <p id="card-counter" class="card-counter"></p>
 

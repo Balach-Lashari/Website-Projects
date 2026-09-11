@@ -31,6 +31,7 @@ let progress = loadProgress();
 let currentCategory = null; // the category object currently open
 let deck = []; // array of { urdu, translit, english, wordIndex } in display order
 let currentIndex = 0; // position within `deck`
+let isFlipped = false; // whether the current card is showing its answer side
 
 // ---- DOM references ----
 const homeView = document.getElementById("home-view");
@@ -50,7 +51,9 @@ const nextBtn = document.getElementById("next-btn");
 const shuffleBtn = document.getElementById("shuffle-btn");
 const learningBtn = document.getElementById("learning-btn");
 const knownBtn = document.getElementById("known-btn");
+const flipBtn = document.getElementById("flip-btn");
 
+const flashcardEl = document.getElementById("flashcard");
 const cardStatusBadge = document.getElementById("card-status-badge");
 const cardUrdu = document.getElementById("card-urdu");
 const cardTranslit = document.getElementById("card-translit");
@@ -175,6 +178,20 @@ function renderCard() {
     cardStatusBadge.textContent = "New";
     cardStatusBadge.className = "status-badge";
   }
+
+  // Every new card starts showing the Urdu-only front side
+  isFlipped = false;
+  updateFlipVisual();
+}
+
+function toggleFlip() {
+  isFlipped = !isFlipped;
+  updateFlipVisual();
+}
+
+function updateFlipVisual() {
+  flashcardEl.classList.toggle("flipped", isFlipped);
+  flashcardEl.setAttribute("aria-pressed", String(isFlipped));
 }
 
 function goToNextCard() {
@@ -213,6 +230,18 @@ nextBtn.addEventListener("click", goToNextCard);
 shuffleBtn.addEventListener("click", shuffleDeck);
 learningBtn.addEventListener("click", () => markCurrentCard("learning"));
 knownBtn.addEventListener("click", () => markCurrentCard("known"));
+flipBtn.addEventListener("click", toggleFlip);
+
+// Clicking/tapping the card itself flips it
+flashcardEl.addEventListener("click", toggleFlip);
+
+// Keyboard support: Enter/Space on the focused card flips it
+flashcardEl.addEventListener("keydown", (event) => {
+  if (event.key === "Enter" || event.key === " ") {
+    event.preventDefault();
+    toggleFlip();
+  }
+});
 
 // Keyboard navigation while a flashcard is open (left/right arrows)
 document.addEventListener("keydown", (event) => {
